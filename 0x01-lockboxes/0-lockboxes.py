@@ -13,11 +13,13 @@ def canUnlockAll(boxes):
 
     opened_boxes = set()
     opened_boxes.add(0)
-    to_explore = [0]
-    while to_explore:
+
+    to_explore = set(boxes[0]).difference(set([0]))
+    while len(to_explore) > 0:
         current_box = to_explore.pop()
-        for key in boxes[current_box]:
-            if key not in opened_boxes:
-                opened_boxes.add(key)
-                to_explore.append(key)
-    return len(opened_boxes) == len(boxes)
+        if not current_box or current_box >= n or current_box < 0:
+            continue
+        if current_box not in opened_boxes:
+            to_explore = to_explore.union(boxes[current_box])
+            opened_boxes.add(current_box)
+    return n == len(opened_boxes)
