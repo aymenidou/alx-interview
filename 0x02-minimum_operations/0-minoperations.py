@@ -12,7 +12,8 @@ def minOperations(n):
         # Find the largest power of 2 less than or equal to n
         largest_factor = largest_power_of_2(n)
 
-        if largest_factor == 1:  # Handle odd or numbers just above a power of 2
+        if largest_factor == 1:  # Handle odd or numbers just above
+            #  a power of 2
             ops += 1  # Copy All (ensures at least one doubling)
             n //= 2  # Divide by 2 for potential doubling
             if n > 1:  # Check if further doubling is possible
