@@ -3,37 +3,39 @@
 
 
 def validUTF8(data):
-    '''validUTF8
-    method that determines if a given data
-      set represents a valid UTF-8 encoding.
-    '''
+    """
+    This function checks if the given data represents a valid UTF-8 encoding.
+
+    Args:
+        data: A list of integers representing the bytes of the data.
+
+    Returns:
+        True if the data is a valid UTF-8 encoding, False otherwise.
+    """
     count_ones = 0
-    for num in data:
+    for byte in data:
         # Extract the 8 least significant bits
-        num = num & 0xFF
-        # If the first bit is 1
-        if num & 0x80:
-            # Must follow 1 to 4 bytes with the format 10xxxxxx
-            if count_ones == 0:
-                count_ones += 1
-                if num & 0x40 == 0:
-                    return False
-                elif num & 0x20 == 0:
-                    count_ones = 3
-                elif num & 0x10 == 0:
-                    count_ones = 4
-                else:
-                    count_ones = 2
+        byte = byte & 0b11111111
+
+        # Check for valid ASCII characters (first byte)
+        if count_ones == 0:
+            if byte <= 0x7F:
+                continue
+            elif byte <= 0xDF:
+                count_ones = 1
+            elif byte <= 0xEF:
+                count_ones = 2
+            elif byte <= 0xF7:
+                count_ones = 3
             else:
-                # Subsequent bytes must start with 10
-                if not (num & 0xC0 == 0x80):
-                    return False
-                count_ones -= 1
-        # Byte does not start with 1
-        else:
-            # If expecting more bytes, return False
-            if count_ones > 0:
                 return False
-            count_ones = 0
-    # If expecting more bytes at the end, return False
+        # Check for continuation bytes (subsequent bytes)
+        elif 0 <= count_ones <= 3:
+            if byte >= 0x80 and byte <= 0xBF:
+                count_ones -= 1
+            else:
+                return False
+        else:
+            return False
+    # Check if all continuation bytes were consumed
     return count_ones == 0
