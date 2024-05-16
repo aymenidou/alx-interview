@@ -1,7 +1,10 @@
 #!/usr/bin/python3
-''''''
+'''module 0x0A. Prime Game'''
+
+
 def sieve(n):
-    ''''''
+    '''generates a list of prime numbers up to the maximum number in nums
+    using the Sieve of Eratosthenes method'''
     is_prime = [True] * (n + 1)
     is_prime[0] = is_prime[1] = False  # 0 and 1 are not primes
     p = 2
@@ -14,7 +17,9 @@ def sieve(n):
 
 
 def isWinner(x, nums):
-    ''''''
+    '''x is the number of rounds and nums is an array of n
+        Return: name of the player that won the most rounds
+        If the winner cannot be determined, return None'''
     if not nums or x < 1:
         return None
 
@@ -22,6 +27,8 @@ def isWinner(x, nums):
     primes = sieve(max_n)
 
     def count_primes_up_to(n):
+        '''helper function counts how many primes are less than or equal to a
+            given n using the precomputed list of primes'''
         return sum(1 for p in primes if p <= n)
 
     maria_wins = 0
@@ -40,7 +47,3 @@ def isWinner(x, nums):
         return "Ben"
     else:
         return None
-
-
-# Example usage:
-print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
